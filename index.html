@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aldo Kusuma — Guru, Developer & Kreator</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Caveat:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          board: '#1E3B2E',
+          boardline: '#2C4F3D',
+          chalk: '#F4EFE4',
+          chalkyellow: '#F0D998',
+          paper: '#FFFDF7',
+          paper2: '#EDE7D8',
+          ruleblue: '#3B5BA9',
+          redink: '#B23A2E',
+          ink: '#232A22',
+          infoblue: '#2F6F9E',
+          kkagreen: '#3F8F5F',
+          devviolet: '#6C4FA3',
+          krepink: '#C24B72',
+        },
+        fontFamily: {
+          display: ['"Space Grotesk"', 'sans-serif'],
+          hand: ['"Caveat"', 'cursive'],
+          body: ['"Plus Jakarta Sans"', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body { background: #FFFDF7; }
+
+  /* Chalkboard texture */
+  .board-bg {
+    background-color: #1E3B2E;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(244,239,228,0.035) 40px),
+      repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(244,239,228,0.02) 40px);
+  }
+  .chalk-dust::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image: radial-gradient(rgba(244,239,228,0.05) 1px, transparent 1px);
+    background-size: 3px 3px;
+    mix-blend-mode: overlay;
+    pointer-events:none;
+  }
+
+  /* Notebook ruled paper */
+  .ruled-paper{
+    background-color:#FFFDF7;
+    background-image: repeating-linear-gradient(to bottom, transparent, transparent 34px, #D9E3F5 35px);
+    background-position: 0 8px;
+  }
+  .margin-line{ border-left: 2px solid #E6B7B0; }
+
+  /* Folder tab shape for nav */
+  .tab-shape{
+    clip-path: polygon(6% 0, 94% 0, 100% 100%, 0% 100%);
+  }
+
+  /* Chalk underline draw-on */
+  .chalk-underline path{
+    stroke-dasharray: 420;
+    stroke-dashoffset: 420;
+    animation: draw 1.3s ease-out 0.5s forwards;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  .fade-up{
+    opacity:0; transform: translateY(18px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .fade-up.in{ opacity:1; transform:none; }
+
+  /* washi tape */
+  .tape{
+    position:absolute; width:70px; height:22px;
+    background: rgba(240,217,152,0.55);
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+
+  /* film strip border */
+  .filmstrip{
+    border-top: 22px solid #16221A;
+    border-bottom: 22px solid #16221A;
+    position:relative;
+  }
+  .filmstrip::before, .filmstrip::after{
+    content:"";
+    position:absolute; left:0; right:0; height:22px;
+    background-image: radial-gradient(#3a4a3f 3px, transparent 3.5px);
+    background-size: 22px 22px;
+    background-position: 8px center;
+  }
+  .filmstrip::before{ top:-22px; }
+  .filmstrip::after{ bottom:-22px; }
+
+  @media (prefers-reduced-motion: reduce){
+    .chalk-underline path, .fade-up{ animation: none !important; transition:none !important; opacity:1 !important; transform:none !important; stroke-dashoffset:0 !important; }
+  }
+
+  ::selection{ background:#F0D998; color:#1E3B2E; }
+</style>
+</head>
+<body class="font-body text-ink antialiased">
+
+<!-- HERO / PAPAN TULIS -->
+<header class="board-bg chalk-dust relative overflow-hidden min-h-screen flex flex-col">
+  <p class="font-hand text-chalkyellow text-2xl md:text-3xl absolute top-6 left-6 md:left-10 -rotate-3">Papan Pak Aldo 👋</p>
+
+  <!-- binder tab nav -->
+  <nav class="w-full flex justify-center gap-1 md:gap-2 pt-16 md:pt-10 px-4 flex-wrap relative z-20" id="navtabs">
+    <a href="#tentang" data-tab="tentang" class="tab-shape px-4 md:px-6 py-2 text-sm md:text-base font-display font-medium text-chalk/90 bg-infoblue/80 hover:bg-infoblue transition-colors">Tentang</a>
+    <a href="#mengajar" data-tab="mengajar" class="tab-shape px-4 md:px-6 py-2 text-sm md:text-base font-display font-medium text-chalk/90 bg-kkagreen/80 hover:bg-kkagreen transition-colors">Mengajar</a>
+    <a href="#proyek" data-tab="proyek" class="tab-shape px-4 md:px-6 py-2 text-sm md:text-base font-display font-medium text-chalk/90 bg-devviolet/80 hover:bg-devviolet transition-colors">Proyek</a>
+    <a href="#kreasi" data-tab="kreasi" class="tab-shape px-4 md:px-6 py-2 text-sm md:text-base font-display font-medium text-chalk/90 bg-krepink/80 hover:bg-krepink transition-colors">Kreasi</a>
+    <a href="#kontak" data-tab="kontak" class="tab-shape px-4 md:px-6 py-2 text-sm md:text-base font-display font-medium text-board bg-chalkyellow hover:brightness-95 transition">Kontak</a>
+  </nav>
+
+  <div class="flex-1 flex flex-col items-center justify-center text-center px-6 relative z-10">
+    <p class="font-mono text-chalkyellow/80 text-xs md:text-sm tracking-[0.3em] mb-4">SMA MUHAMMADIYAH WONOSOBO</p>
+    <h1 class="font-display font-700 text-chalk text-5xl sm:text-6xl md:text-8xl tracking-tight relative inline-block" style="font-weight:700;">
+      ALDO KUSUMA
+      <svg class="chalk-underline absolute left-0 -bottom-3 md:-bottom-5 w-full" viewBox="0 0 420 20" fill="none" preserveAspectRatio="none">
+        <path d="M4 12 C 100 4, 320 18, 416 8" stroke="#F0D998" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </h1>
+    <p class="font-hand text-chalk text-2xl sm:text-3xl md:text-4xl mt-8 max-w-2xl">
+      Guru Informatika &amp; KKA · Web Developer · Kreator Visual
+    </p>
+    <a href="#tentang" class="mt-14 text-chalk/70 font-mono text-xs tracking-wide animate-bounce">buka buku catatan ↓</a>
+  </div>
+</header>
+
+<!-- TENTANG -->
+<section id="tentang" class="ruled-paper py-24 md:py-32 px-6">
+  <div class="max-w-5xl mx-auto grid md:grid-cols-[220px_1fr] gap-12 md:gap-16 items-start">
+    <div class="fade-up relative mx-auto md:mx-0">
+      <div class="tape -top-3 -left-3 -rotate-12"></div>
+      <div class="tape -bottom-3 -right-3 rotate-12"></div>
+      <div class="w-44 h-44 md:w-52 md:h-52 bg-paper2 border border-ink/10 rotate-[-2deg] shadow-md overflow-hidden flex items-center justify-center">
+        <img src="images/aldokus.JPG" class="w-full h-full object-cover brightness-95" alt="Foto Aldo Kusuma">
+      </div>    
+      <span class="absolute -right-6 -bottom-8 font-hand text-redink text-2xl rotate-6">✓ guru</span>
+    </div>
+
+    <div class="fade-up margin-line pl-8">
+      <p class="font-mono text-xs tracking-[0.25em] text-ruleblue mb-3">TENTANG SAYA</p>
+      <h2 class="font-display font-700 text-3xl md:text-4xl text-ink mb-6" style="font-weight:700;">Aldo Kusuma</h2>
+      <p class="text-lg leading-relaxed text-ink/80 mb-4">
+        Sehari-hari saya berdiri di depan kelas, menjelaskan logika pemrograman kepada siswa. Di waktu yang lain,
+        saya duduk di depan code editor merapikan baris kode, atau di depan timeline video menyusun potongan
+        klip untuk konten sekolah.
+      </p>
+      <p class="text-lg leading-relaxed text-ink/80">
+        Bagi saya, mengajar dan membangun sesuatu adalah dua sisi mata uang yang sama: keduanya soal
+        menyusun sesuatu yang rumit menjadi lebih mudah dipahami — entah itu untuk siswa di kelas,
+        pengguna sebuah aplikasi, atau penonton di sosial media.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- MENGAJAR -->
+<section id="mengajar" class="bg-paper2 py-24 md:py-32 px-6">
+  <div class="max-w-5xl mx-auto">
+    <p class="fade-up font-mono text-xs tracking-[0.25em] text-kkagreen mb-3 text-center">DI DALAM KELAS</p>
+    <h2 class="fade-up font-display font-700 text-3xl md:text-4xl text-center mb-16" style="font-weight:700;">Mata Pelajaran yang Saya Ampu</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <div class="fade-up bg-paper border border-ink/10 shadow-sm">
+        <div class="tab-shape bg-infoblue text-chalk font-display text-sm px-5 py-2 inline-block ml-6 -mt-px" style="font-weight:600;">INFORMATIKA</div>
+        <div class="p-8 pt-6">
+          <h3 class="font-display text-xl mb-3" style="font-weight:600;">Informatika</h3>
+          <p class="text-ink/75 leading-relaxed">
+            Mengenalkan siswa pada dasar-dasar berpikir komputasional: logika, algoritma, dan
+            pemrograman dasar, sampai literasi digital yang mereka pakai sehari-hari.
+          </p>
+        </div>
+      </div>
+
+      <div class="fade-up bg-paper border border-ink/10 shadow-sm">
+        <div class="tab-shape bg-kkagreen text-chalk font-display text-sm px-5 py-2 inline-block ml-6 -mt-px" style="font-weight:600;">KKA</div>
+        <div class="p-8 pt-6">
+          <h3 class="font-display text-xl mb-3" style="font-weight:600;">Koding dan Kecerdasan Artifisial</h3>
+          <p class="text-ink/75 leading-relaxed">
+            Mata pelajaran baru yang saya ampu, mengenalkan siswa pada dunia coding dan
+            kecerdasan artifisial sejak dini — bekal yang relevan untuk masa depan mereka.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROYEK WEB -->
+<section id="proyek" class="bg-paper py-24 md:py-32 px-6" style="background-image: radial-gradient(#e9e4d5 1px, transparent 1px); background-size: 22px 22px;">
+  <div class="max-w-5xl mx-auto">
+    <p class="fade-up font-mono text-xs tracking-[0.25em] text-devviolet mb-3 text-center">DI LUAR JAM MENGAJAR</p>
+    <h2 class="fade-up font-display font-700 text-3xl md:text-4xl text-center mb-6" style="font-weight:700;">Sisi Web Developer</h2>
+
+    <div class="fade-up flex justify-center mb-14">
+      <div class="inline-flex items-center gap-3 bg-board text-chalk px-5 py-3 border border-ink/10">
+        <span class="font-mono text-xs text-chalkyellow">CERTIFIED</span>
+        <span class="font-display text-sm" style="font-weight:600;">Web Developer Bootcamp — Purwadhika</span>
+      </div>
+    </div>
+
+    <div class="fade-up flex justify-center mb-14">
+      <a href="https://drive.google.com/file/d/13N_A_am9GtfqRsHsZx-fWT6qlDmg5Kti/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 bg-board text-chalk px-5 py-3 border border-ink/10">
+        <span class="font-mono text-xs text-chalkyellow">CERTIFIED</span>
+        <span class="font-display text-sm" style="font-weight:600;">Intro to Software Engineer — RevoU</span>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- browser window cards -->
+      <div class="fade-up bg-white border border-ink/10 shadow-sm overflow-hidden hover:-translate-y-1 transition-transform">
+        <div class="flex items-center gap-1.5 px-3 py-2 bg-paper2 border-b border-ink/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-redink/70"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-chalkyellow"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-kkagreen/70"></span>
+        </div>
+        <div class="p-6">
+          <p class="font-mono text-xs text-devviolet mb-2">// website-sekolah</p>
+          <h3 class="font-display text-lg mb-2" style="font-weight:600;">Website Profil Sekolah</h3>
+          <p class="text-sm text-ink/70">Contoh proyek: laman profil sekolah dengan informasi kegiatan dan berita terkini.</p>
+        </div>
+      </div>
+
+      <div class="fade-up bg-white border border-ink/10 shadow-sm overflow-hidden hover:-translate-y-1 transition-transform">
+        <div class="flex items-center gap-1.5 px-3 py-2 bg-paper2 border-b border-ink/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-redink/70"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-chalkyellow"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-kkagreen/70"></span>
+        </div>
+        <div class="p-6">
+          <p class="font-mono text-xs text-devviolet mb-2">// aplikasi-nilai</p>
+          <h3 class="font-display text-lg mb-2" style="font-weight:600;">Aplikasi Rekap Nilai</h3>
+          <p class="text-sm text-ink/70">Contoh proyek: alat bantu guru untuk mencatat dan merekap nilai siswa.</p>
+        </div>
+      </div>
+
+      <div class="fade-up bg-white border border-ink/10 shadow-sm overflow-hidden hover:-translate-y-1 transition-transform">
+        <div class="flex items-center gap-1.5 px-3 py-2 bg-paper2 border-b border-ink/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-redink/70"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-chalkyellow"></span>
+          <span class="w-2.5 h-2.5 rounded-full bg-kkagreen/70"></span>
+        </div>
+        <div class="p-6">
+          <p class="font-mono text-xs text-devviolet mb-2">// portofolio</p>
+          <h3 class="font-display text-lg mb-2" style="font-weight:600;">Portofolio Pribadi</h3>
+          <p class="text-sm text-ink/70">Halaman yang sedang kamu lihat sekarang — dibangun dengan Tailwind CSS.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KREASI VISUAL -->
+<section id="kreasi" class="bg-[#16221A] py-24 md:py-28">
+  <div class="max-w-5xl mx-auto px-6">
+    <p class="fade-up font-mono text-xs tracking-[0.25em] text-krepink mb-3 text-center">DI BALIK LAYAR</p>
+    <h2 class="fade-up font-display font-700 text-3xl md:text-4xl text-center text-chalk mb-4" style="font-weight:700;">Kreasi Visual</h2>
+    <p class="fade-up text-center text-chalk/60 max-w-xl mx-auto mb-16">Mengedit foto dan video untuk konten sosial media, dokumentasi kegiatan sekolah, hingga materi pembelajaran.</p>
+  </div>
+
+  <div class="filmstrip fade-up bg-[#0f1712] py-8">
+    <div class="max-w-5xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="aspect-[4/5] bg-gradient-to-br from-krepink/30 to-devviolet/30 flex items-center justify-center relative">
+        <svg class="w-8 h-8 text-chalk/70" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="aspect-[4/5] bg-gradient-to-br from-infoblue/30 to-kkagreen/30 flex items-center justify-center">
+        <svg class="w-8 h-8 text-chalk/70" fill="currentColor" viewBox="0 0 24 24"><path d="M9 3 7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>
+      </div>
+      <div class="aspect-[4/5] bg-gradient-to-br from-chalkyellow/30 to-krepink/30 flex items-center justify-center">
+        <svg class="w-8 h-8 text-chalk/70" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <div class="aspect-[4/5] bg-gradient-to-br from-devviolet/30 to-infoblue/30 flex items-center justify-center">
+        <svg class="w-8 h-8 text-chalk/70" fill="currentColor" viewBox="0 0 24 24"><path d="M9 3 7.17 5H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-3.17L15 3H9zm3 15a5 5 0 1 1 0-10 5 5 0 0 1 0 10z"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak" class="ruled-paper py-24 md:py-32 px-6">
+  <div class="max-w-md mx-auto text-center fade-up">
+    <p class="font-mono text-xs tracking-[0.25em] text-redink mb-3">SEBUAH CATATAN</p>
+    <h2 class="font-display font-700 text-3xl md:text-4xl mb-8" style="font-weight:700;">Mari Terhubung</h2>
+
+    <div class="relative bg-chalkyellow/90 p-8 shadow-md rotate-[-1deg]">
+      <span class="tape -top-3 left-1/2 -translate-x-1/2 rotate-2"></span>
+      <p class="font-hand text-2xl text-board mb-6">Ada proyek, kelas, atau ide bareng? Kirim pesan saja.</p>
+      <div class="space-y-3 text-left font-mono text-sm text-ink/80">
+        <p>✉️ &nbsp;aldokusumaw@gmail.com</p>
+        <p>📸 &nbsp;instagram.com/aldokusuma_</p>
+        <p>💬 &nbsp;wa.me/6282220861112</p>
+      </div>
+    </div>
+    <p class="text-xs font-mono text-ink/30 mt-6">*ganti dengan kontak asli kamu</p>
+  </div>
+</section>
+
+<footer class="bg-board py-10 text-center">
+  <p class="font-hand text-chalk/70 text-xl">dibuat oleh Aldo Kusuma</p>
+</footer>
+
+<script>
+  // scroll reveal
+  const items = document.querySelectorAll('.fade-up');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold: 0.15 });
+  items.forEach(el=>io.observe(el));
+
+  // active tab highlight
+  const tabs = document.querySelectorAll('#navtabs a');
+  const sections = [...tabs].map(t=>document.getElementById(t.dataset.tab));
+  const spy = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      const id = entry.target.id;
+      const tab = document.querySelector(`#navtabs a[data-tab="${id}"]`);
+      if(entry.isIntersecting){ tab.style.filter = 'brightness(1.15)'; tab.style.transform='translateY(-2px)'; }
+      else { tab.style.filter=''; tab.style.transform=''; }
+    });
+  }, { threshold: 0.5 });
+  sections.forEach(s=>s && spy.observe(s));
+</script>
+</body>
+</html>
